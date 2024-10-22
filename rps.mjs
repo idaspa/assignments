@@ -8,38 +8,61 @@ import { ANSI } from './lib/ansi.mjs';
 import { getRandomItemFromArray } from './lib/random.mjs';
 import GAME_DICTIONARY from './dictionary.mjs';
 
+
 const CHOICES = { rock: 1, paper: 2, scissors: 3 };
 const LIST_OF_CHOICES = [CHOICES.rock, CHOICES.paper, CHOICES.scissors];
+let chosenLanguage = GAME_DICTIONARY.en
+let gamerunning = false;
 
-print(ANSI.CLEAR_SCREEN);
-print(GAME_DICTIONARY.title, ANSI.COLOR.RED);
+
+print(chosenLanguage.play)
+let gamePlay = await rl.question("");
+if(gamePlay == "Y"){
+    gamerunning = true;
+}
+
+while(gamerunning == true){
+    
+    print(ANSI.CLEAR_SCREEN);
+print(chosenLanguage.title, ANSI.COLOR.RED);
 
 let player = await askForPlayerChoice();
 let npc = makeAIChoice();
 
-print(`${GAME_DICTIONARY.youPicked} ${getDesc(player)} ${GAME_DICTIONARY.aiPicked} ${getDesc(npc)}`);
-print(GAME_DICTIONARY.winner + evaluateWinner(player, npc));
+print(`${chosenLanguage.youPicked} ${getDesc(player)} ${chosenLanguage.aiPicked} ${getDesc(npc)}`);
+print(chosenLanguage.winner + evaluateWinner(player, npc));
+
+print(chosenLanguage.replay);
+let replayAnswer = await rl.question("");
+
+//hvis det kommer inn N så vil ikke spilleren spille 
+if(replayAnswer == "N"){
+    gamerunning = false;
+}
+
+
+}
 
 // ---- Game functions etc..
 
 function evaluateWinner(p1Ch, p2Ch) {
     // Vi går ut i fra at spiller 2 vinner :)
-    let result = GAME_DICTIONARY.player2;
+    let result = chosenLanguage.player2;
 
     // Men vi må sjekke om noe annet skjedde.
     if (p1Ch == p2Ch) {
-        result = GAME_DICTIONARY.draw;
+        result = chosenLanguage.draw;
     } else if (p1Ch == CHOICES.rock) {
         if (p2Ch == CHOICES.scissors) {
-            result = GAME_DICTIONARY.player1;
+            result = chosenLanguage.player1;
         }
     } else if (p1Ch == CHOICES.paper) {
         if (p2Ch == CHOICES.rock) {
-            result = GAME_DICTIONARY.player1;
+            result = chosenLanguage.player1;
         }
     } else if (p1Ch == CHOICES.scissors) {
         if (p2Ch == CHOICES.paper) {
-            result = GAME_DICTIONARY.player1;
+            result = chosenLanguage.player1;
         }
     }
 
@@ -51,7 +74,7 @@ function makeAIChoice() {
 }
 
 function getDesc(choice) {
-    return GAME_DICTIONARY.choices[choice - 1]
+    return chosenLanguage.choices[choice - 1]
 }
 
 async function askForPlayerChoice() {
@@ -59,7 +82,7 @@ async function askForPlayerChoice() {
     let choice = null;
 
     do {
-        print(GAME_DICTIONARY.selectionQuestion);
+        print(chosenLanguage.selectionQuestion);
         let rawChocie = await rl.question("");
         rawChocie = rawChocie.toUpperCase();
         choice = evaluatePlayerChoice(rawChocie);
@@ -71,11 +94,11 @@ async function askForPlayerChoice() {
 function evaluatePlayerChoice(rawChocie) {
     let choice = null;
 
-    if (rawChocie == GAME_DICTIONARY.rock) {
+    if (rawChocie == chosenLanguage.rock) {
         choice = CHOICES.rock;
-    } else if (rawChocie == GAME_DICTIONARY.paper) {
+    } else if (rawChocie == chosenLanguage.paper) {
         choice = CHOICES.paper;
-    } else if (rawChocie == GAME_DICTIONARY.scissors) {
+    } else if (rawChocie == chosenLanguage.scissors) {
         choice = CHOICES.scissors;
     }
     return choice;
