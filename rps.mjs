@@ -14,33 +14,30 @@ const LIST_OF_CHOICES = [CHOICES.rock, CHOICES.paper, CHOICES.scissors];
 let chosenLanguage = GAME_DICTIONARY.en
 let gamerunning = false;
 
+print(chosenLanguage.play, ANSI.COLOR.GREEN);
 
-print(chosenLanguage.play)
 let gamePlay = await rl.question("");
 if(gamePlay == "Y"){
     gamerunning = true;
 }
-
 while(gamerunning == true){
     
     print(ANSI.CLEAR_SCREEN);
-print(chosenLanguage.title, ANSI.COLOR.RED);
+print(chosenLanguage.title, ANSI.COLOR.YELLOW);
 
 let player = await askForPlayerChoice();
 let npc = makeAIChoice();
 
 print(`${chosenLanguage.youPicked} ${getDesc(player)} ${chosenLanguage.aiPicked} ${getDesc(npc)}`);
-print(chosenLanguage.winner + evaluateWinner(player, npc));
+print(chosenLanguage.winner + evaluateWinner (player, npc));
 
-print(chosenLanguage.replay);
+print(chosenLanguage.replay, ANSI.COLOR.RED);
 let replayAnswer = await rl.question("");
 
 //hvis det kommer inn N så vil ikke spilleren spille 
 if(replayAnswer == "N"){
     gamerunning = false;
 }
-
-
 }
 
 // ---- Game functions etc..
@@ -82,7 +79,7 @@ async function askForPlayerChoice() {
     let choice = null;
 
     do {
-        print(chosenLanguage.selectionQuestion);
+        print(chosenLanguage.selectionQuestion, ANSI.COLOR.BLUE);
         let rawChocie = await rl.question("");
         rawChocie = rawChocie.toUpperCase();
         choice = evaluatePlayerChoice(rawChocie);
